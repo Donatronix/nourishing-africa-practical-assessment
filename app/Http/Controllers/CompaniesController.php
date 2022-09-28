@@ -155,7 +155,11 @@ class CompaniesController extends Controller
      * @throws Exception
      */
     public function destroy(CompanyContract $service, int $id)
-    {
+    {$user=Auth::user();
+    $company= $service->getRepository()->find($id);
+        if(!$user->isAdmin()||$user->id!==$conpany->user->id){
+            return redirect()->back()->with('error', 'Invalid user');
+        }
         $deleted = $service->getRepository()->delete($id);
         return redirect()->back()->with('message', 'Company deleted.');
     }
